@@ -1,5 +1,7 @@
+
 import requests
 import re
+import pandas as pd
 ##starturl='https://pinyin.sogou.com/dict/cate/index/1'
 ##def getdalei():
 ##    reponse1=requests.get(starturl)
@@ -8,13 +10,26 @@ import re
 ##        print(urllist1)
 ##getdalei()
 urllist='https://pinyin.sogou.com/dict/cate/index/3'
+#获取词表链接
 def getwordlist(x):
     reponse2=requests.get(x)
     getwurl=re.findall('''<div class="detail_title"><a href='(.*?)'>(.*?)</a></div>''',reponse2.text,re.S)
-    return getwurl
-getwordlist(urllist)
-p=2
-while(1):
+    for u1 in getwurl:
+        for u2 in u1:
+            if 'dict' in u2:
+                realu=u2.replace('detail/index','dialog/word_list')
+                realus='https://pinyin.sogou.com'+realu
+                getword(realus)
+#获取词表
+def getword(w):
+    rp=requests.get(w)
+    rp.encoding='utf-8'
+    tb = pd.read_html(rp.text)[1]
+    print(tb)
+    tb.to_csv('data.csv',encoding='utf_8_sig')
+#遍历分页
+p=1
+while(p<5):
         pageurl=urllist+'/default/%s'%(p)
         print(pageurl)
         getwordlist(pageurl)
