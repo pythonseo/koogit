@@ -19,14 +19,21 @@ def getwordlist(x):
             if 'dict' in u2:
                 realu=u2.replace('detail/index','dialog/word_list')
                 realus='https://pinyin.sogou.com'+realu
-                getword(realus)
+                pageid=re.findall('\d\d\d\d\d',realus)
+                print(pageid)
+                getword(realus,pageid)
 #获取词表
-def getword(w):
-    rp=requests.get(w)
-    rp.encoding='utf-8'
-    tb = pd.read_html(rp.text)[1]
-    print(tb)
-    tb.to_csv('data.csv',encoding='utf_8_sig')
+def getword(w,p):
+    try:
+        rp=requests.get(w)
+        rp.encoding='utf-8'
+        tb = pd.read_html(rp.text)[1]
+        print(tb)
+        filename=p[0]+'.csv'
+        tb.to_csv(filename,encoding='utf_8_sig')
+    except Exception as e:
+        pass
+        print(w,p,e)
 #遍历分页
 p=1
 while(p<5):
