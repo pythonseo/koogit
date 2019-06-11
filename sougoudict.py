@@ -2,6 +2,7 @@
 import requests
 import re
 import pandas as pd
+import threading
 ##starturl='https://pinyin.sogou.com/dict/cate/index/1'
 ##def getdalei():
 ##    reponse1=requests.get(starturl)
@@ -9,7 +10,8 @@ import pandas as pd
 ##    for urllist1 in url1.findall(reponse1.text):
 ##        print(urllist1)
 ##getdalei()
-urllist='https://pinyin.sogou.com/dict/cate/index/3'
+urllist=['https://pinyin.sogou.com/dict/cate/index/3',
+         'https://pinyin.sogou.com/dict/cate/index/2']
 #获取词表链接
 def getwordlist(x):
     reponse2=requests.get(x)
@@ -35,13 +37,21 @@ def getword(w,p):
         pass
         print(w,p,e)
 #遍历分页
-p=1
-while(p<5):
-        pageurl=urllist+'/default/%s'%(p)
-        print(pageurl)
-        getwordlist(pageurl)
-        deurl=getwordlist(pageurl)
-        print(deurl)
-        p+=1
-        if deurl==[]:
-            break
+def run(url):
+    p=1
+    while(p<5):
+            pageurl=url+'/default/%s'%(p)
+            print(pageurl)
+            getwordlist(pageurl)
+            deurl=getwordlist(pageurl)
+            print(deurl)
+            p+=1
+            if deurl==[]:
+                break
+threads=[]
+for url in urllist:
+    t=threading.Thread(target=run,args=(url,))
+    t.start()
+    threads.append(t)
+for t in threads:
+    t.join()
