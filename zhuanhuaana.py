@@ -22,18 +22,19 @@ def getfile(file):
     name=[]
     totla=[]
     for x in saleline:
-        if '小学' in str(x[0]):
+        if '号' not in str(x[0]):
             name.append(x[0])
-            totla.append(x[1])
+            totla.append(int(x[1]))
     return sum(totla)
 
 num=[]
-for fid in range(1,19):
+dataid=[]
+for fid in range(1,32):
     file=r'{}\7.{}.xls'.format(path,fid)
     print(file)
     num.append(getfile(file))
+    dataid.append('{}'.format(fid))
 print(num)
-dataid=['7.1','7.2','7.3','7.4','7.5','7.6','7.7','7.8','7.9','7.10','7.11','7.12','7.13','7.14','7.15','7.16','7.17','7.18']
 plt.figure(figsize=(10,5))
 plt.xlabel('Date')
 plt.ylabel('sales')
