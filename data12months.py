@@ -33,11 +33,11 @@ class Dataana(object):
             sales=[]
             for ad in df.推广位:
                 adloc.append(ad)
-            for sale in df.注册人数:
+            for sale in df.点击次数:
                 sales.append(sale)
             numzone=[]
             for salesdata in zip(adloc,sales):
-                if 'GRE' in str(salesdata[0]) and int(salesdata[1])>0:
+                if '中考' in str(salesdata[0]) and int(salesdata[1])>0:
                     num.append(salesdata[1])
                     numzone.append(salesdata[1])
 #                    print(salesdata)
@@ -64,6 +64,8 @@ class Dataana(object):
         plt.xlabel('Date')
         plt.ylabel('Datas')
         plt.title('近12个月数据变动')
+        for x,y in zip(dates,zonedata):
+            plt.text(x,y,str(y),va='top',ha='center',fontsize='15',color='w')
         plt.show()
 dates=['2018-9','2018-10','2018-11','2018-12','2019-1','2019-2','2019-3','2019-4','2019-5','2019-6','2019-7','2019-8']
 if __name__=='__main__':
